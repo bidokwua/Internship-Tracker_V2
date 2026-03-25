@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Internship Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ── HEADER ──────────────────────────────────────────────────────────── -->
+  <header id="header">
+    <div class="header-left">
+      <div class="logo">⚡</div>
+      <span class="app-title">Internship Tracker</span>
+      <span class="app-count" id="appCount">0 apps</span>
+    </div>
+    <div class="header-right">
+      <button class="btn btn-ghost" id="openNotifsBtn">🔔 Notifications</button>
+      <button class="btn btn-primary" id="openAddBtn">+ Add Application</button>
+    </div>
+  </header>
+
+  <!-- ── MAIN ────────────────────────────────────────────────────────────── -->
+  <main>
+
+    <!-- Stat Cards -->
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-label">Total</div><div class="stat-value" id="statTotal">0</div></div>
+      <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value amber" id="statApplied">0</div></div>
+      <div class="stat-card"><div class="stat-label">Interviews</div><div class="stat-value sky" id="statInterview">0</div></div>
+      <div class="stat-card"><div class="stat-label">Accepted</div><div class="stat-value green" id="statAccepted">0</div></div>
+      <div class="stat-card"><div class="stat-label">Rejected</div><div class="stat-value red" id="statRejected">0</div></div>
+      <div class="stat-card">
+        <div class="stat-label">Response Rate</div>
+        <div class="stat-value purple" id="statRate">0%</div>
+        <div class="stat-sub">interviews + decisions</div>
+      </div>
+    </div>
+
+    <!-- Follow-up Banner -->
+    <div class="followup-banner hidden" id="followupBanner">
+      <span>⚠️</span>
+      <span class="followup-title">Follow-up needed:</span>
+      <span id="followupList"></span>
+    </div>
+
+    <!-- Upcoming Interview Banner -->
+    <div class="interview-banner hidden" id="interviewBanner">
+      <span>📅</span>
+      <span class="interview-title">Upcoming interviews:</span>
+      <span id="interviewBannerList"></span>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-row">
+      <input type="text" id="searchInput" class="input search-input" placeholder="Search company or role…" />
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-status="All">All</button>
+        <button class="filter-btn" data-status="Applied">Applied</button>
+        <button class="filter-btn" data-status="Interview Scheduled">Interview</button>
+        <button class="filter-btn" data-status="Accepted">Accepted</button>
+        <button class="filter-btn" data-status="Rejected">Rejected</button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper">
+      <div id="emptyState" class="empty-state hidden">
+        No applications found. <span id="emptyAddLink" class="link-text">Add one →</span>
+      </div>
+      <table id="appTable">
+        <thead>
+          <tr>
+            <th data-col="company">Company <span class="sort-icon"></span></th>
+            <th data-col="role">Role <span class="sort-icon"></span></th>
+            <th data-col="dateApplied">Applied <span class="sort-icon"></span></th>
+            <th data-col="emailUsed">Email Used <span class="sort-icon"></span></th>
+            <th data-col="status">Status <span class="sort-icon"></span></th>
+            <th>Interview</th>
+            <th data-col="followUpDate">Follow-up <span class="sort-icon"></span></th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+    <p class="table-hint">Click any row to edit · Status dropdowns update instantly</p>
+
+  </main>
+
+  <!-- ── ADD / EDIT MODAL ────────────────────────────────────────────────── -->
+  <div class="modal-overlay hidden" id="formModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="formModalTitle">New Application</span>
+        <button class="modal-close" id="closeFormModal">×</button>
+      </div>
+      <div class="modal-body">
+
+        <div id="notesPreview" class="notes-preview hidden"></div>
+
+        <form id="appForm" onsubmit="return false;">
+          <input type="hidden" id="formId" />
+
+          <!-- Row 1: Company + Role -->
+          <div class="form-grid">
+            <div class="field">
+              <label class="field-label">Company</label>
+              <input type="text" id="formCompany" class="input" placeholder="e.g. Palantir" required />
+            </div>
+            <div class="field">
+              <label class="field-label">Role</label>
+              <input type="text" id="formRole" class="input" placeholder="e.g. SWE Intern" required />
+            </div>
+          </div>
+
+          <!-- Row 2: Date + Email Used -->
+          <div class="form-grid">
+            <div class="field">
+              <label class="field-label">Date Applied</label>
+              <input type="date" id="formDate" class="input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Email Used</label>
+              <input type="email" id="formEmailUsed" class="input" placeholder="e.g. hassanz@carleton.edu" />
+            </div>
+          </div>
+
+          <!-- Row 3: Status + Follow-up -->
+          <div class="form-grid">
+            <div class="field">
+              <label class="field-label">Status</label>
+              <select id="formStatus" class="input">
+                <option value="Applied">Applied</option>
+                <option value="Interview Scheduled">Interview Scheduled</option>
+                <option value="Interview Done">Interview Done</option>
+                <option value="Accepted">Accepted</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Withdrawn">Withdrawn</option>
+              </select>
+            </div>
+            <div class="field">
+              <label class="field-label">Follow-up Date (optional)</label>
+              <input type="date" id="formFollowUp" class="input" />
+            </div>
+          </div>
+
+          <!-- Link -->
+          <div class="field">
+            <label class="field-label">Application Link</label>
+            <input type="url" id="formLink" class="input" placeholder="https://..." />
+          </div>
+
+          <!-- ── INTERVIEW SECTION — shown only for interview statuses ── -->
+          <div id="interviewSection" class="interview-section hidden">
+            <div class="section-divider">
+              <span>Interview Details</span>
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label class="field-label">Interview Date</label>
+                <input type="date" id="formInterviewDate" class="input input-highlight-blue" />
+              </div>
+              <div class="field">
+                <label class="field-label">Format</label>
+                <select id="formInterviewFormat" class="input input-highlight-blue">
+                  <option value="">— Select —</option>
+                  <option value="Video call">Video call</option>
+                  <option value="Phone call">Phone call</option>
+                  <option value="On-site">On-site</option>
+                  <option value="Take-home">Take-home</option>
+                  <option value="Technical screen">Technical screen</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label class="field-label">Earliest slot</label>
+                <input type="time" id="formInterviewStart" class="input input-highlight-blue" />
+              </div>
+              <div class="field">
+                <label class="field-label">Latest slot</label>
+                <input type="time" id="formInterviewEnd" class="input input-highlight-blue" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">Interview Notes</label>
+              <textarea id="formInterviewNotes" class="input textarea" placeholder="e.g. Behavioral + system design round, bring portfolio…"></textarea>
+            </div>
+          </div>
+
+          <!-- Notes -->
+          <div class="field">
+            <label class="field-label">General Notes</label>
+            <textarea id="formNotes" class="input textarea" placeholder="Any notes about this application…"></textarea>
+          </div>
+
+          <!-- Actions -->
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary full-width" id="saveBtn">Save Application</button>
+            <button type="button" class="btn btn-danger hidden" id="deleteBtn">Delete</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── NOTIFICATION SETTINGS MODAL ───────────────────────────────────── -->
+  <div class="modal-overlay hidden" id="notifsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">🔔 Notification Settings</span>
+        <button class="modal-close" id="closeNotifsModal">×</button>
+      </div>
+      <div class="modal-body">
+
+        <p class="notifs-hint">
+          Reminders appear as browser notifications. You only need to approve permission once.
+          Notifications fire whenever the page is open and enough time has passed.
+        </p>
+
+        <!-- Permission button -->
+        <div id="permissionBlock" class="permission-block hidden">
+          <span>Browser notifications are not yet enabled.</span>
+          <button class="btn btn-primary" id="requestPermBtn" style="padding: 6px 14px; font-size: 12px;">Enable Notifications</button>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Remind me every</label>
+          <div class="freq-row">
+            <button class="freq-btn" id="freqMinus">−</button>
+            <span id="freqDisplay">7</span>
+            <span class="freq-unit">days</span>
+            <button class="freq-btn" id="freqPlus">+</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Notify me about</label>
+          <div class="notif-options">
+
+            <label class="notif-option">
+              <input type="checkbox" id="notifFollowUp" class="notif-check" checked />
+              <div class="notif-option-text">
+                <span class="notif-option-title">Follow-up reminders</span>
+                <span class="notif-option-sub">Applied with no response after your set interval</span>
+              </div>
+            </label>
+
+            <label class="notif-option">
+              <input type="checkbox" id="notifInterview" class="notif-check" checked />
+              <div class="notif-option-text">
+                <span class="notif-option-title">Interview coming up</span>
+                <span class="notif-option-sub">Reminds you 48 hours before a scheduled interview</span>
+              </div>
+            </label>
+
+            <label class="notif-option">
+              <input type="checkbox" id="notifWeekly" class="notif-check" />
+              <div class="notif-option-text">
+                <span class="notif-option-title">Weekly summary</span>
+                <span class="notif-option-sub">A roundup of all your active applications every 7 days</span>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Test</label>
+          <button class="btn btn-ghost full-width" id="testNotifBtn">Send a test notification</button>
+        </div>
+
+        <button class="btn btn-primary full-width" id="saveNotifsBtn">Save Settings</button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SCRIPTS ─────────────────────────────────────────────────────────── -->
+  <script src="data.js"></script>
+  <script src="notifications.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
