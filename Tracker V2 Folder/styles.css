@@ -78,7 +78,7 @@ body {
 
 .logo {
   width: 28px; height: 28px;
-  background: linear-gradient(135deg, #F59E0B, #F97316);
+  background: linear-gradient(135deg, #0010f7, #01ff40);
   border-radius: 7px;
   display: flex; align-items: center; justify-content: center;
   font-size: 14px; flex-shrink: 0;
