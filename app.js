@@ -27,6 +27,7 @@ function renderAll() {
   renderStats();
   renderFollowUpBanner();
   renderInterviewBanner();
+  renderDeadlineBanner();
   renderTable();
   const n = apps.length;
   document.getElementById("appCount").textContent = `${n} app${n !== 1 ? "s" : ""}`;
@@ -82,6 +83,31 @@ function renderInterviewBanner() {
   }).join("");
 }
 
+// ── Deadline Follow-up Banner ─────────────────────────────────────────────────
+function renderDeadlineBanner() {
+  const banner = document.getElementById("deadlineBanner");
+  const list   = document.getElementById("deadlineBannerList");
+
+  // Trigger if: status is Applied, deadline has passed by 3+ days, contact email exists
+  const ready = apps.filter(a => {
+    if (a.status !== "Applied" || !a.deadline || !a.contactEmail) return false;
+    const daysPast = daysAgo(a.deadline);
+    return daysPast !== null && daysPast >= 3;
+  });
+
+  if (!ready.length) { banner.classList.add("hidden"); return; }
+
+  banner.classList.remove("hidden");
+  list.innerHTML = ready.map(a => {
+    const days = daysAgo(a.deadline);
+    const mailto = `mailto:${encodeURIComponent(a.contactEmail)}?subject=${encodeURIComponent(`Following up — ${a.role} at ${a.company}`)}&body=${encodeURIComponent(`Hi ${a.contactName || "there"},\n\nI wanted to follow up on my application for the ${a.role} position at ${a.company}. I remain very interested in the role and would love to discuss next steps.\n\nBest,\nAyobami`)}`;
+    return `<a class="deadline-chip" href="${mailto}">
+      📬 ${escHtml(a.company)} — deadline passed ${days} day${days !== 1 ? "s" : ""} ago
+      ${a.contactName ? `· ${escHtml(a.contactName)}` : ""}
+      ${a.contactTitle ? `<span class="deadline-chip-title">${escHtml(a.contactTitle)}</span>` : ""}
+    </a>`;
+  }).join("");
+}
 // ── Table ─────────────────────────────────────────────────────────────────────
 function renderTable() {
   const tbody   = document.getElementById("tableBody");
@@ -163,7 +189,12 @@ function buildRow(app, index) {
     ? `<td class="td-followup ${followUpPast ? "overdue" : ""}">${followUpPast ? "⏰ " : ""}${escHtml(app.followUpDate)}</td>`
     : `<td style="color:var(--muted2);font-family:var(--font-mono);font-size:11px">—</td>`;
 
-  // Link cell
+  const deadlinePast = app.deadline && app.deadline < todayStr();
+  const deadlineCell = app.deadline
+    ? `<td class="td-deadline ${deadlinePast ? "overdue" : ""}">${deadlinePast ? "🔒 " : ""}${escHtml(app.deadline)}</td>`
+    : `<td style="color:var(--muted2);font-family:var(--font-mono);font-size:11px">—</td>`;
+  
+    // Link cell
   const linkCell = app.link
     ? `<td class="link-cell"><a class="ext-link" href="${escHtml(app.link)}" target="_blank" rel="noopener">↗</a></td>`
     : `<td></td>`;
@@ -188,6 +219,7 @@ function buildRow(app, index) {
       </td>
       ${interviewCell}
       ${followUpCell}
+      ${deadlineCell}
       ${linkCell}
     </tr>
   `;
@@ -228,6 +260,10 @@ function openEditModal(id) {
   document.getElementById("formInterviewStart").value  = app.interviewStart  || "";
   document.getElementById("formInterviewEnd").value    = app.interviewEnd    || "";
   document.getElementById("formInterviewNotes").value  = app.interviewNotes  || "";
+  document.getElementById("formDeadline").value      = app.deadline      || "";
+  document.getElementById("formContactName").value      = app.contactName     || "";
+  document.getElementById("formContactEmail").value      = app.contactEmail    || "";
+  document.getElementById("formContactTitle").value      = app.contactTitle    || "";
 
   // Notes preview
   const preview = document.getElementById("notesPreview");
@@ -277,6 +313,10 @@ function clearForm() {
   document.getElementById("formInterviewStart").value  = "";
   document.getElementById("formInterviewEnd").value    = "";
   document.getElementById("formInterviewNotes").value  = "";
+  document.getElementById("formDeadline").value      = "";
+  document.getElementById("formContactName").value      = "";
+  document.getElementById("formContactEmail").value      = "";
+  document.getElementById("formContactTitle").value      = "";
 }
 
 function getFormValues() {
@@ -294,6 +334,10 @@ function getFormValues() {
     interviewStart:  document.getElementById("formInterviewStart").value,
     interviewEnd:    document.getElementById("formInterviewEnd").value,
     interviewNotes:  document.getElementById("formInterviewNotes").value,
+    deadline:        document.getElementById("formDeadline").value,
+    contactName:     document.getElementById("formContactName").value,
+    contactEmail:    document.getElementById("formContactEmail").value,
+    contactTitle:    document.getElementById("formContactTitle").value,
   };
 }
 

@@ -160,6 +160,25 @@ main { padding: 24px 32px; }
   border-radius: 6px; padding: 2px 8px;
   font-family: var(--font-mono); font-size: 11px;
 }
+.deadline-banner {
+  background: rgba(167,139,250,0.08); border: 1px solid rgba(167,139,250,0.25);
+  border-radius: 10px; padding: 10px 16px; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.deadline-title {
+  color: var(--purple); font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+}
+.deadline-chip {
+  background: rgba(167,139,250,0.15); color: #C4B5FD;
+  border-radius: 6px; padding: 4px 10px;
+  font-family: var(--font-mono); font-size: 11px;
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid rgba(167,139,250,0.2); transition: background .15s;
+}
+.deadline-chip:hover { background: rgba(167,139,250,0.25); }
+.deadline-chip-title {
+  color: rgba(196,181,253,0.6); font-size: 10px;
+}
 
 /* ── Filters ───────────────────────────────────────────────────────────────── */
 .filters-row {
@@ -224,6 +243,8 @@ tbody tr:last-child td { border-bottom: none; }
 .td-date     { color: var(--muted3); font-family: var(--font-mono); font-size: 12px; }
 .td-followup { font-family: var(--font-mono); font-size: 11px; color: var(--muted3); }
 .td-followup.overdue { color: var(--red); }
+.td-deadline { font-family: var(--font-mono); font-size: 11px; color: var(--muted3); }
+.td-deadline.overdue { color: var(--purple); }
 
 /* ── Status Badges ─────────────────────────────────────────────────────────── */
 .badge {
@@ -288,6 +309,14 @@ tbody tr:last-child td { border-bottom: none; }
 .form-actions { display: flex; gap: 8px; margin-top: 8px; }
 
 /* ── Interview Section (conditional) ──────────────────────────────────────── */
+.contact-section {
+  background: rgba(167,139,250,0.04);
+  border: 1px solid rgba(167,139,250,0.18);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
 .interview-section {
   background: rgba(96,165,250,0.04);
   border: 1px solid rgba(96,165,250,0.18);

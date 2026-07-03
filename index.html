@@ -54,6 +54,13 @@
       <span id="interviewBannerList"></span>
     </div>
 
+    <!-- Deadline Follow-up Banner -->
+    <div class="deadline-banner hidden" id="deadlineBanner">
+      <span>📬</span>
+      <span class="deadline-title">Ready to follow up:</span>
+      <span id="deadlineBannerList"></span>
+    </div>
+
     <!-- Filters -->
     <div class="filters-row">
       <input type="text" id="searchInput" class="input search-input" placeholder="Search company or role…" />
@@ -81,6 +88,7 @@
             <th data-col="status">Status <span class="sort-icon"></span></th>
             <th>Interview</th>
             <th data-col="followUpDate">Follow-up <span class="sort-icon"></span></th>
+            <th data-col="deadline">Deadline <span class="sort-icon"></span></th>
             <th>Link</th>
           </tr>
         </thead>
@@ -125,7 +133,7 @@
             </div>
             <div class="field">
               <label class="field-label">Email Used</label>
-              <input type="email" id="formEmailUsed" class="input" placeholder="e.g. hassanz@carleton.edu" />
+              <input type="email" id="formEmailUsed" class="input" placeholder="e.g. bidokwua@carleton.edu" />
             </div>
           </div>
 
@@ -148,10 +156,37 @@
             </div>
           </div>
 
-          <!-- Link -->
-          <div class="field">
-            <label class="field-label">Application Link</label>
-            <input type="url" id="formLink" class="input" placeholder="https://..." />
+          <!-- Row: Deadline + Link -->
+          <div class="form-grid">
+            <div class="field">
+              <label class="field-label">Application Deadline (optional)</label>
+              <input type="date" id="formDeadline" class="input" />
+            </div>
+            <div class="field">
+              <label class="field-label">Application Link</label>
+              <input type="url" id="formLink" class="input" placeholder="https://..." />
+            </div>
+          </div>
+          
+          <!-- Contact Section -->
+          <div class="contact-section">
+            <div class="section-divider">
+              <span>Company Contact</span>
+            </div>
+            <div class="form-grid">
+              <div class="field">
+                <label class="field-label">Contact Name</label>
+                <input type="text" id="formContactName" class="input" placeholder="e.g. Sarah Chen" />
+              </div>
+              <div class="field">
+                <label class="field-label">Contact Title</label>
+                <input type="text" id="formContactTitle" class="input" placeholder="e.g. Senior Recruiter" />
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label">Contact Email</label>
+              <input type="email" id="formContactEmail" class="input" placeholder="e.g. schen@anduril.com" />
+            </div>
           </div>
 
           <!-- ── INTERVIEW SECTION — shown only for interview statuses ── -->
