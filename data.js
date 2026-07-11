@@ -109,6 +109,27 @@ const SEED_DATA = [
     interviewEnd: "",
     interviewNotes: "",
   },
+  {
+    id: 5,
+    company: "JPMorgan Chase",
+    role: "2027 Internal Audit Analyst Program - Summer Analyst",
+    dateApplied: "2026-07-08",
+    emailUsed: "bidokwua@carleton.edu",
+    status: "Applied",
+    link: "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/job/210765547",
+    notes: "9-week summer program, pipeline to full-time. Technology or Business track. HireVue video interview required next — complete within 3 days of receiving invite. Rolling admissions, deadline Oct 30 2026. Locations: Jersey City NJ, Chicago IL, Plano TX, Columbus OH, Wilmington DE.",
+    followUpDate: "2026-07-22",
+    deadline: "2026-10-30",
+    contactName:  "",
+    contactEmail: "",
+    contactTitle: "",
+    lastUpdated: "2026-07-08",
+    interviewDate: "",
+    interviewFormat: "",
+    interviewStart: "",
+    interviewEnd: "",
+    interviewNotes: "",
+  }
 ];
 
 const STORAGE_KEY       = "ift_apps_v2";
