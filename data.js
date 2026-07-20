@@ -129,7 +129,28 @@ const SEED_DATA = [
     interviewStart: "",
     interviewEnd: "",
     interviewNotes: "",
-  }
+  },
+  {
+    id: 6,
+    company: "Aquatic Capital Management",
+    role: "Software Engineer, Intern (Summer 2027)",
+    dateApplied: "2026-07-19",
+    emailUsed: "bidokwua@carleton.edu",
+    status: "Applied",
+    link: "https://job-boards.greenhouse.io/aquaticcapitalmanagement/jobs/8489233002",
+    notes: "Second application — first was rejected July 1, their email advised waiting a year before reconnecting. Reapplied anyway. Auto-confirmation received same day.",
+    followUpDate: "2026-08-02",
+    deadline: "",
+    contactName:  "",
+    contactEmail: "",
+    contactTitle: "",
+    lastUpdated: "2026-07-19",
+    interviewDate: "",
+    interviewFormat: "",
+    interviewStart: "",
+    interviewEnd: "",
+    interviewNotes: "",
+  },
 ];
 
 const STORAGE_KEY       = "ift_apps_v2";
