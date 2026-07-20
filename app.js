@@ -341,11 +341,36 @@ function getFormValues() {
   };
 }
 
+// ── CSV Export ────────────────────────────────────────────────────────────────
+function exportCSV() {
+  const headers = [
+    "Company", "Role", "Date Applied", "Email Used", "Status",
+    "Deadline", "Follow-up Date", "Contact Name", "Contact Title",
+    "Contact Email", "Link", "Notes"
+  ];
+
+  const rows = apps.map(a => [
+    a.company, a.role, a.dateApplied, a.emailUsed, a.status,
+    a.deadline, a.followUpDate, a.contactName, a.contactTitle,
+    a.contactEmail, a.link, a.notes
+  ].map(val => `"${(val || "").replace(/"/g, '""')}"`));
+
+  const csv = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
+  const blob = new Blob([csv], { type: "text/csv" });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href     = url;
+  a.download = `internship-tracker-${todayStr()}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 // ── Event Wiring ──────────────────────────────────────────────────────────────
 function wireEvents() {
 
   // Header buttons
   document.getElementById("openAddBtn").addEventListener("click", openAddModal);
+  document.getElementById("exportCsvBtn").addEventListener("click", exportCSV);
   document.getElementById("openNotifsBtn").addEventListener("click", openNotifsModal);
   document.getElementById("emptyAddLink").addEventListener("click", openAddModal);
 
