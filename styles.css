@@ -203,7 +203,9 @@ main { padding: 24px 32px; }
 /* ── Table ─────────────────────────────────────────────────────────────────── */
 .table-wrapper {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-lg); overflow: hidden;
+  border-radius: var(--radius-lg); 
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 .empty-state {
   padding: 48px 0; text-align: center;
