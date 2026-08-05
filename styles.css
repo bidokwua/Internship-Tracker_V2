@@ -199,6 +199,7 @@ main { padding: 24px 32px; }
 .filter-btn.active[data-status="Interview Scheduled"]{ background: var(--sky-bg);   color: var(--sky);   border-color: rgba(56,189,248,0.3); }
 .filter-btn.active[data-status="Accepted"]           { background: var(--green-bg); color: var(--green); border-color: rgba(74,222,128,0.3); }
 .filter-btn.active[data-status="Rejected"]           { background: var(--red-bg);   color: var(--red);   border-color: rgba(248,113,113,0.3); }
+.filter-btn.active[data-status="Ghosted"]            { background: var(--slate-bg); color: var(--slate); border-color: rgba(148,163,184,0.3); }
 
 /* ── Table ─────────────────────────────────────────────────────────────────── */
 .table-wrapper {
@@ -262,6 +263,7 @@ tbody tr:last-child td { border-bottom: none; }
 .badge-interview-done     { background: var(--purple-bg); color: var(--purple); border: 1px solid rgba(167,139,250,0.2); }
 .badge-accepted           { background: var(--green-bg);  color: var(--green);  border: 1px solid rgba(74,222,128,0.2); }
 .badge-rejected           { background: var(--red-bg);    color: var(--red);    border: 1px solid rgba(248,113,113,0.2); }
+.badge-ghosted            { background: var(--slate-bg);  color: var(--slate);  border: 1px solid rgba(148,163,184,0.2); }
 .badge-withdrawn          { background: var(--slate-bg);  color: var(--slate);  border: 1px solid rgba(148,163,184,0.2); }
 
 /* Status cell — invisible select layered over badge */

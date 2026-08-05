@@ -14,6 +14,7 @@ const STATUSES = [
   "Interview Done",
   "Accepted",
   "Rejected",
+  "Ghosted",
   "Withdrawn",
 ];
 
@@ -338,6 +339,7 @@ function badgeHTML(status) {
     "Interview Done":       "interview-done",
     "Accepted":             "accepted",
     "Rejected":             "rejected",
+    "Ghosted":              "ghosted",
     "Withdrawn":            "withdrawn",
   };
   const cls = slugMap[status] || "applied";
