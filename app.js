@@ -50,7 +50,7 @@ function renderFollowUpBanner() {
   const list   = document.getElementById("followupList");
 
   const due = apps.filter(
-    a => a.status === "Applied" && daysAgo(a.lastUpdated) >= FOLLOWUP_THRESHOLD_DAYS
+    a => a.status === "Applied" && a.followUpDate && a.followUpDate < todayStr()
   );
 
   if (!due.length) { banner.classList.add("hidden"); return; }
@@ -160,7 +160,7 @@ function renderTable() {
 
 // ── Build Table Row ───────────────────────────────────────────────────────────
 function buildRow(app, index) {
-  const needsFollowUp = app.status === "Applied" && daysAgo(app.lastUpdated) >= FOLLOWUP_THRESHOLD_DAYS;
+  const needsFollowUp = app.status === "Applied" && app.followUpDate && app.followUpDate < todayStr();
   const followUpPast  = app.followUpDate && app.followUpDate < todayStr();
   const interviewSoon = app.status === "Interview Scheduled" && app.interviewDate &&
                         daysUntil(app.interviewDate) >= 0 && daysUntil(app.interviewDate) <= 3;
