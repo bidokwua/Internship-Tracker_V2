@@ -319,11 +319,12 @@ function getStats(apps) {
   ).length;
   const accepted  = apps.filter(a => a.status === "Accepted").length;
   const rejected  = apps.filter(a => a.status === "Rejected").length;
+  const ghosted   = apps.filter(a => a.status === "Ghosted").length;
   const responded = apps.filter(a =>
-    ["Interview Scheduled", "Interview Done", "Accepted", "Rejected"].includes(a.status)
+    ["Interview Scheduled", "Interview Done", "Accepted", "Rejected", "Ghosted"].includes(a.status)
   ).length;
   const responseRate = total ? Math.round((responded / total) * 100) : 0;
-  return { total, applied, interview, accepted, rejected, responseRate };
+  return { total, applied, interview, accepted, rejected, ghosted, responseRate };
 }
 
 // ── Badge HTML ────────────────────────────────────────────────────────────────

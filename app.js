@@ -41,6 +41,7 @@ function renderStats() {
   document.getElementById("statInterview").textContent = s.interview;
   document.getElementById("statAccepted").textContent  = s.accepted;
   document.getElementById("statRejected").textContent  = s.rejected;
+  document.getElementById("statGhosted").textContent   = s.ghosted;
   document.getElementById("statRate").textContent      = `${s.responseRate}%`;
 }
 

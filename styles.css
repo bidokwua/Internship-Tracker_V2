@@ -133,6 +133,7 @@ main { padding: 24px 32px; }
 .stat-value.green  { color: var(--green); }
 .stat-value.red    { color: var(--red); }
 .stat-value.purple { color: var(--purple); }
+.stat-value.slate  { color: var(--slate); }
 .stat-sub { color: var(--muted); font-family: var(--font-mono); font-size: 10px; margin-top: 4px; }
 
 /* ── Banners ───────────────────────────────────────────────────────────────── */
