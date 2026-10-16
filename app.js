@@ -148,12 +148,19 @@ function renderTable() {
     });
   });
 
-  // Inline status dropdown
+// Inline status dropdown
   tbody.querySelectorAll(".quick-select").forEach(sel => {
     sel.addEventListener("change", e => {
       e.stopPropagation();
       const id = Number(sel.closest("tr").dataset.id);
       quickUpdateStatus(apps, id, sel.value);
+
+      // ⚡ SYNC TO GOOGLE SHEET
+      const updatedApp = apps.find(a => a.id === id);
+      if (typeof syncAppToGoogleSheet === "function" && updatedApp) {
+        syncAppToGoogleSheet(updatedApp);
+      }
+
       renderAll();
     });
   });
@@ -384,7 +391,7 @@ function wireEvents() {
   // Show/hide interview section when status changes
   document.getElementById("formStatus").addEventListener("change", syncInterviewSection);
 
-  // Save form
+// Save form
   document.getElementById("appForm").addEventListener("submit", () => {
     const form = getFormValues();
     if (!form.company.trim() || !form.role.trim()) {
@@ -392,20 +399,38 @@ function wireEvents() {
       return;
     }
     const id = Number(document.getElementById("formId").value);
+    let savedApp;
+
     if (id) {
       updateApp(apps, id, form);
+      savedApp = apps.find(a => a.id === id);
     } else {
-      addApp(apps, form);
+      savedApp = addApp(apps, form) || apps[apps.length - 1];
     }
+
+    // ⚡ SYNC TO GOOGLE SHEET
+    if (typeof syncAppToGoogleSheet === "function" && savedApp) {
+      syncAppToGoogleSheet(savedApp);
+    }
+
     closeFormModal();
     renderAll();
   });
 
-  // Delete button
+// Delete button
   document.getElementById("deleteBtn").addEventListener("click", () => {
     const id = Number(document.getElementById("formId").value);
     if (!id) return;
     if (!confirm(`Delete this application? This cannot be undone.`)) return;
+    
+    // Sync deletion to Google Sheet before removing locally
+    if (typeof syncAppToGoogleSheet === "function") {
+      const appToDelete = apps.find(a => a.id === id);
+      if (appToDelete) {
+        syncAppToGoogleSheet({ ...appToDelete, status: "DELETED" });
+      }
+    }
+
     apps = deleteApp(apps, id);
     window._apps = apps;
     closeFormModal();
