@@ -1,90 +1,80 @@
 # Internship Tracker v2
 
-A personal dashboard to track internship applications — built with plain
-HTML, CSS, and JavaScript. No frameworks, no build step, no server needed.
+A personal dashboard for tracking internship applications. Plain HTML, CSS, and JavaScript. No frameworks, no build step, no server.
 
-## File Structure
+I built it to keep a 70+ application search organized: what I applied to, with which email, what happened next, and when to check back.
+
+## Features
+
+- Sortable, searchable table with status filters
+- Seven statuses with no forced order (an application can jump to any status)
+- Add/edit form: company, role, date applied, email used, status, follow-up date, deadline, link, company contact, and notes
+- Interview section that appears for "Interview Scheduled" and "Interview Done" (date, format, time window, notes)
+- Summary cards: total, pending, interviews, accepted, rejected, ghosted, response rate
+- Banners for follow-ups needed, upcoming interviews, and applications ready to follow up
+- CSV export
+- Browser notifications for follow-ups, interviews, and a weekly summary (only while the page is open)
+- Optional sync of each saved record to a Google Sheet
+
+## Status reference
+
+| Status              | Meaning                                       |
+|---------------------|-----------------------------------------------|
+| Applied             | Submitted, waiting to hear back               |
+| Interview Scheduled | An interview or assessment is booked          |
+| Interview Done      | It happened, waiting on a decision            |
+| Accepted            | Offer received                                |
+| Rejected            | The company passed                            |
+| Ghosted             | No response after the follow-up window        |
+| Withdrawn           | I pulled out                                  |
+
+## Files
 
 ```
-internship-tracker-v2/
-├── index.html         ← Open this in your browser to run the app
-├── styles.css         ← All styling
-├── data.js            ← Data model, localStorage, CRUD, helpers
-├── notifications.js   ← Browser notification system
-└── app.js             ← Main controller: rendering, events, state
+Internship-Tracker/
+├── index.html                  Open this in a browser to run the app
+├── styles.css                  All styling
+├── data.js                     Statuses, sample data, localStorage, CRUD helpers
+├── notifications.js            Browser notification logic
+├── googleSync.js               Optional Google Sheet sync
+├── googleSyncConfig.example.js Template for the sync URL (copy it, see below)
+├── app.js                      Main controller: rendering, events, state
+└── .gitignore                  Keeps private files out of the repo
 ```
 
-## How to Run
+Private files that are intentionally not in this repo: `localData.js` (my real applications), `googleSyncConfig.js` (my sync URL), and any backup or cleanup scripts for that data.
 
-1. Put all 5 files in one folder
-2. Double-click `index.html` — it opens directly in your browser
-3. Or right-click `index.html` in VSCode → "Open with Live Server"
+## How to run
 
-No `npm install`, no terminal, no server needed.
+1. Download or clone the repo.
+2. Open `index.html` in a browser, or use "Open with Live Server" in VS Code.
 
-## What's New in v2
+On first load the app shows three sample applications. The browser console may show 404 errors for `localData.js` and `googleSyncConfig.js`. That is expected and harmless, because those files are private and optional.
 
-### Flexible status flow
-All 6 statuses are available at all times — no forced order:
-- Applied → Rejected (skipped interview entirely)
-- Applied → Interview Scheduled → Interview Done → Accepted
-- Applied → Withdrawn (you pulled out)
-- Any path you need
+Your data is stored in your browser's localStorage, so it stays on your machine.
 
-### Email used field
-Log which email address you used to apply to each company.
-Searchable from the filter bar.
+## Using your own data from a file (optional)
 
-### Interview scheduler
-When you set status to "Interview Scheduled" or "Interview Done",
-a new section appears in the form for:
-- Interview date
-- Format (video call, on-site, phone, etc.)
-- Time window (earliest and latest slot)
-- Interview-specific notes
+Create a `localData.js` next to `index.html`. It should define an array of application records with the same fields as `SEED_DATA` in `data.js` and write them to localStorage under the key `ift_apps_v2`. The file is gitignored so it never gets pushed.
 
-The interview date and time window show as a pill in the table.
+One behavior to know about: `localData.js` re-seeds the browser whenever its contents change, so edits made in the browser can be overwritten after you change the file.
 
-### Browser notifications
-Click "🔔 Notifications" in the header to configure:
-- How often to check (1–30 days)
-- Follow-up reminders (Applied with no response after X days)
-- Interview reminders (48 hrs before a scheduled interview)
-- Weekly summary
+## Google Sheet sync (optional)
 
-Notifications use your browser's built-in system — no email, no accounts.
-You approve permission once. Reminders fire while the page is open.
+When you save, change a status, or delete a record, the app can send that record to a Google Apps Script web app that you set up yourself.
 
-## Status Reference
+1. Create your own Apps Script web app that accepts a JSON POST and writes a row.
+2. Copy `googleSyncConfig.example.js` to `googleSyncConfig.js`.
+3. Put your web app URL in `googleSyncConfig.js`.
 
-| Status               | Meaning                                      |
-|----------------------|----------------------------------------------|
-| Applied              | Submitted, waiting to hear back              |
-| Interview Scheduled  | You have an interview booked                 |
-| Interview Done       | Interview happened, waiting on decision      |
-| Accepted             | You got an offer                             |
-| Rejected             | They passed, or you were rejected            |
-| Withdrawn            | You withdrew your application                |
+`googleSyncConfig.js` is gitignored. Treat the URL like a password: anyone who has it can send rows to your sheet. If it is missing or still the placeholder, sync is skipped and the app works normally.
 
-## GitHub Workflow
+## Notifications
 
-```bash
-# First time
-git init
-git add .
-git commit -m "initial commit — internship tracker v2"
-git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/internship-tracker.git
-git push -u origin main
+Click "Notifications" in the header to set how often to check (1 to 30 days) and which reminders you want. Reminders use the browser's built-in Notifications API, need one-time permission, and only fire while the page is open in a tab.
 
-# After changes
-git add .
-git commit -m "what you changed"
-git push
-```
+## Privacy notes
 
-## Security Note
-
-This app runs entirely in your browser and stores data in localStorage.
-There is no API key, no email parsing, and no external services.
-It is safe to push to a public GitHub repo.
+- No accounts, no tracking, no backend of mine.
+- Data lives in localStorage unless you turn on Sheet sync, in which case full records (including notes and contact details) are sent to your own Apps Script URL.
+- Do not commit `localData.js`, backups of it, or `googleSyncConfig.js`.
